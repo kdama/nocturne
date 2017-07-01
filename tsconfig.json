@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2017"
+    ],
+    "newLine": "LF",
+    "outDir": "build/dist",
+    "sourceMap": true,
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
+    "target": "es3"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
