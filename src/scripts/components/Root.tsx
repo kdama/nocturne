@@ -1,29 +1,29 @@
 import * as React from "react";
 
 interface IState {
-  enableLoop: boolean;
   isDraggingOver: boolean;
+  isLoopEnabled: boolean;
+  isRandomSpeedEnabled: boolean;
   speed: number;
   volume: number;
 }
 
 export class Root extends React.Component<{}, IState> {
   private audioContext: AudioContext;
-  private bufferSource: AudioBufferSourceNode;
-  private gain: GainNode;
+  private bufferSource: AudioBufferSourceNode | null;
+  private gain: GainNode | null;
 
   constructor(props: {}) {
     super(props);
 
     this.audioContext = new AudioContext();
-    this.bufferSource = this.audioContext.createBufferSource();
-    this.gain = this.audioContext.createGain();
-    this.bufferSource.connect(this.gain);
-    this.gain.connect(this.audioContext.destination);
+    this.bufferSource = null;
+    this.gain = null;
 
     this.state = {
-      enableLoop: false,
       isDraggingOver: false,
+      isLoopEnabled: false,
+      isRandomSpeedEnabled: false,
       speed: 1,
       volume: 1,
     };
@@ -48,9 +48,9 @@ export class Root extends React.Component<{}, IState> {
           Volume:
           <input
             type="range"
-            min="0.001"
+            min="0"
             max="2"
-            step="0.001"
+            step="0.01"
             value={this.state.volume}
             onChange={this.handleChangeVolume}
           />
@@ -60,9 +60,9 @@ export class Root extends React.Component<{}, IState> {
           Speed:
           <input
             type="range"
-            min="0.001"
+            min="0.1"
             max="2"
-            step="0.001"
+            step="0.01"
             value={this.state.speed}
             onChange={this.handleChangeSpeed}
           />
@@ -72,11 +72,22 @@ export class Root extends React.Component<{}, IState> {
           Loop:
           <input
             type="checkbox"
-            checked={this.state.enableLoop}
-            onChange={this.handleChangeLoop}
+            checked={this.state.isLoopEnabled}
+            onChange={this.handleToggleLoop}
           />
-          {this.state.enableLoop ? "Enabled" : "Disabled"}
+          {this.state.isLoopEnabled ? "Enabled" : "Disabled"}
         </div>
+        {this.state.isLoopEnabled && (
+          <div>
+            Randomize the speed for each loop:
+            <input
+              type="checkbox"
+              checked={this.state.isRandomSpeedEnabled}
+              onChange={this.handleToogleRandomSpeed}
+            />
+            {this.state.isRandomSpeedEnabled ? "Enabled" : "Disabled"}
+          </div>
+        )}
       </div>
     );
   }
@@ -89,19 +100,48 @@ export class Root extends React.Component<{}, IState> {
       isDraggingOver: false,
     });
 
-    const files = e.dataTransfer.files; // FileList object.
+    const file = e.dataTransfer.files[0];
+    const reader = new FileReader();
+    reader.onloadend = async _ => {
+      if (this.bufferSource) {
+        this.bufferSource.stop(0);
+      }
+      this.bufferSource = this.audioContext.createBufferSource();
+      this.gain = this.audioContext.createGain();
+      this.bufferSource.connect(this.gain);
+      this.gain.connect(this.audioContext.destination);
 
-    // files is a FileList of File objects. List some properties.
-    for (let i = 0; files[i]; i++) {
-      const reader = new FileReader();
-      reader.onloadend = async _ => {
-        this.bufferSource.buffer = await this.audioContext.decodeAudioData(
-          reader.result,
-        );
-        this.bufferSource.start(0);
+      const buffer = await this.audioContext.decodeAudioData(reader.result);
+      this.bufferSource.buffer = buffer;
+      this.bufferSource.playbackRate.setValueAtTime(this.state.speed, 0);
+      this.gain.gain.setValueAtTime(this.state.volume, 0);
+      this.bufferSource.start(0);
+
+      const onended = async () => {
+        if (this.bufferSource && this.state.isLoopEnabled) {
+          if (this.state.isRandomSpeedEnabled) {
+            this.setState({
+              speed:
+                Math.round((Math.random() * (2 - 0.1) + 0.1) / 0.01) * 0.01,
+            });
+          }
+
+          this.bufferSource = this.audioContext.createBufferSource();
+          this.gain = this.audioContext.createGain();
+          this.bufferSource.connect(this.gain);
+          this.gain.connect(this.audioContext.destination);
+
+          this.bufferSource.buffer = buffer;
+          this.bufferSource.playbackRate.setValueAtTime(this.state.speed, 0);
+          this.gain.gain.setValueAtTime(this.state.volume, 0);
+          this.bufferSource.start(0);
+
+          this.bufferSource.onended = onended;
+        }
       };
-      reader.readAsArrayBuffer(files[i]);
-    }
+      this.bufferSource.onended = onended;
+    };
+    reader.readAsArrayBuffer(file);
   };
 
   private handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -120,19 +160,29 @@ export class Root extends React.Component<{}, IState> {
 
   private handleChangeSpeed = (e: React.ChangeEvent<HTMLInputElement>) => {
     const speed = Number(e.target.value);
-    this.bufferSource.playbackRate.setValueAtTime(speed, 0);
+    if (this.bufferSource) {
+      this.bufferSource.playbackRate.setValueAtTime(speed, 0);
+    }
     this.setState({ speed });
   };
 
   private handleChangeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const volume = Number(e.target.value);
-    this.gain.gain.setValueAtTime(volume, 0);
+    if (this.gain) {
+      this.gain.gain.setValueAtTime(volume, 0);
+    }
     this.setState({ volume });
   };
 
-  private handleChangeLoop = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private handleToggleLoop = (e: React.ChangeEvent<HTMLInputElement>) => {
     const loop = e.target.checked;
-    this.bufferSource.loop = loop;
-    this.setState({ enableLoop: loop });
+    this.setState({ isLoopEnabled: loop });
+  };
+
+  private handleToogleRandomSpeed = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const randomSpeed = e.target.checked;
+    this.setState({ isRandomSpeedEnabled: randomSpeed });
   };
 }
