@@ -60,10 +60,10 @@ export class Root extends React.Component<{}, IState> {
           Speed:
           <input
             type="range"
-            min="0.1"
+            min="0.25"
             max="2"
             step="0.01"
-            value={this.state.speed}
+            value={this.state.speed.toFixed(2)}
             onChange={this.handleChangeSpeed}
           />
           {this.state.speed}
@@ -104,6 +104,7 @@ export class Root extends React.Component<{}, IState> {
     const reader = new FileReader();
     reader.onloadend = async _ => {
       if (this.bufferSource) {
+        this.bufferSource.onended = null;
         this.bufferSource.stop(0);
       }
       this.bufferSource = this.audioContext.createBufferSource();
@@ -122,7 +123,7 @@ export class Root extends React.Component<{}, IState> {
           if (this.state.isRandomSpeedEnabled) {
             this.setState({
               speed:
-                Math.round((Math.random() * (2 - 0.1) + 0.1) / 0.01) * 0.01,
+                Math.round((Math.random() * (2 - 0.25) + 0.25) / 0.01) * 0.01,
             });
           }
 
