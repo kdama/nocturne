@@ -54,7 +54,11 @@ const baseConfig: () => webpack.Configuration = () => ({
     filename: "[name].js",
     path: path.join(__dirname, "./build/dist"),
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "nocturne",
+    }),
+  ],
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
   },
@@ -71,6 +75,9 @@ const productionConfig: () => webpack.Configuration = () => ({
     minimize: true,
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      title: "nocturne",
+    }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: "production",
     }),
