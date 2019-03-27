@@ -1347,6 +1347,11 @@ buffer-from@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.0.0.tgz#4cb8832d23612589b0406e9e2956c17f06fdf531"
 
+buffer-from@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
+  integrity sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==
+
 buffer-indexof@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/buffer-indexof/-/buffer-indexof-1.1.1.tgz#52fabcc6a606d1a00302802648ef68f639da268c"
@@ -6785,10 +6790,18 @@ source-map-support@^0.4.15:
   dependencies:
     source-map "^0.5.6"
 
-source-map-support@^0.5.0, source-map-support@^0.5.3:
+source-map-support@^0.5.0:
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.4.tgz#54456efa89caa9270af7cd624cc2f123e51fbae8"
   dependencies:
+    source-map "^0.6.0"
+
+source-map-support@^0.5.6:
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.11.tgz#efac2ce0800355d026326a0ca23e162aeac9a4e2"
+  integrity sha512-//sajEx/fGL3iw6fltKMdPvy8kL3kJ2O3iuYlRoT3k9Kb4BjOoZ+BZzaNHeuaruSt+Kf3Zk9tnfAQg9/AJqUVQ==
+  dependencies:
+    buffer-from "^1.0.0"
     source-map "^0.6.0"
 
 source-map-url@^0.4.0:
@@ -7278,17 +7291,18 @@ ts-loader@^4.2.0:
     micromatch "^3.1.4"
     semver "^5.0.1"
 
-ts-node@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-5.0.1.tgz#78e5d1cb3f704de1b641e43b76be2d4094f06f81"
+ts-node@^6.0.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-6.2.0.tgz#65a0ae2acce319ea4fd7ac8d7c9f1f90c5da6baf"
+  integrity sha512-ZNT+OEGfUNVMGkpIaDJJ44Zq3Yr0bkU/ugN1PHbU+/01Z7UV1fsELRiTx1KuQNvQ1A3pGh3y25iYF6jXgxV21A==
   dependencies:
     arrify "^1.0.0"
-    chalk "^2.3.0"
+    buffer-from "^1.1.0"
     diff "^3.1.0"
     make-error "^1.1.1"
     minimist "^1.2.0"
     mkdirp "^0.5.1"
-    source-map-support "^0.5.3"
+    source-map-support "^0.5.6"
     yn "^2.0.0"
 
 tslib@^1.8.0, tslib@^1.8.1:
@@ -7309,11 +7323,12 @@ tslint-loader@^3.5.3:
     rimraf "^2.4.4"
     semver "^5.3.0"
 
-tslint-react@^3.5.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/tslint-react/-/tslint-react-3.5.1.tgz#a5ca48034bf583fb63b42763bb89fa23062d5390"
+tslint-react@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/tslint-react/-/tslint-react-4.0.0.tgz#b4bb4c01c32448cb14d23f143a2f5e4989bb961e"
+  integrity sha512-9fNE0fm9zNDx1+b6hgy8rgDN2WsQLRiIrn3+fbqm0tazBVF6jiaCFAITxmU+WSFWYE03Xhp1joCircXOe1WVAQ==
   dependencies:
-    tsutils "^2.13.1"
+    tsutils "^3.9.1"
 
 tslint@^5.5.0:
   version "5.9.1"
@@ -7332,9 +7347,16 @@ tslint@^5.5.0:
     tslib "^1.8.0"
     tsutils "^2.12.1"
 
-tsutils@^2.12.1, tsutils@^2.13.1:
+tsutils@^2.12.1:
   version "2.26.1"
   resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.26.1.tgz#9e4a0cb9ff173863f34c22a961969081270d1878"
+  dependencies:
+    tslib "^1.8.1"
+
+tsutils@^3.9.1:
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.9.1.tgz#2a40dc742943c71eca6d5c1994fcf999956be387"
+  integrity sha512-hrxVtLtPqQr//p8/msPT1X1UYXUjizqSit5d9AQ5k38TcV38NyecL5xODNxa73cLe/5sdiJ+w1FqzDhRBA/anA==
   dependencies:
     tslib "^1.8.1"
 
