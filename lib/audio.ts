@@ -98,10 +98,10 @@ export default class Audio {
 
   stop() {
     if (this.bufferSource) {
-      console.log("audio already playing");
+      console.log("audio stopping...");
       this.bufferSource.onended = null;
       this.bufferSource.stop(0);
-      console.log("audio force-stopped");
+      console.log("audio successfully stopped");
     }
   }
 
