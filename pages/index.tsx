@@ -27,6 +27,7 @@ export default () => {
     }
 
     const file = e.dataTransfer.files[0];
+    audio.stop();
     audio.play({
       file,
       onNextLoop: ({ nextPlayOptions }) => {
