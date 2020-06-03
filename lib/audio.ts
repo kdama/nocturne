@@ -64,8 +64,11 @@ export default class Audio {
         if (this.bufferSource && this.playOptions.loop) {
           console.log("next loop starting...");
           if (this.playOptions.randomizeSpeedEachLoop) {
-            this.playOptions.speed =
-              Math.round((Math.random() * (2 - 0.25) + 0.25) / 0.01) * 0.01;
+            this.playOptions = {
+              ...this.playOptions,
+              speed:
+                Math.round((Math.random() * (2 - 0.25) + 0.25) / 0.01) * 0.01,
+            };
           }
 
           this.bufferSource = this.audioContext.createBufferSource();
