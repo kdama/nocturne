@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Audio, { PlayOptions } from "../lib/audio";
 
-export default () => {
+const App = () => {
   const [audio, setAudio] = useState<Audio | null>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [playOptions, setPlayOptions] = useState<PlayOptions>({
@@ -138,3 +138,5 @@ export default () => {
     </div>
   );
 };
+
+export default App;
